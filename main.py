@@ -134,8 +134,8 @@ def process_audio(wav_file):
                 os.remove(wav_file)
 
 def on_key_event(e):
-    # Sử dụng phím F8 làm Push-to-talk
-    if e.name == 'f8':
+    # Sử dụng phím Ctrl làm Push-to-talk
+    if e.name == 'ctrl':
         if e.event_type == 'down':
             start_recording()
         elif e.event_type == 'up':
@@ -150,7 +150,7 @@ if __name__ == "__main__":
         
     print("="*50)
     print("🚀 Ứng dụng 'myvoice' đang chạy!")
-    print("🎙️  Nhấn và GIỮ phím 'F8', nói, và NHẢ phím để kết thúc.")
+    print("🎙️  Nhấn và GIỮ phím 'Ctrl', nói, và NHẢ phím để kết thúc.")
     print("Văn bản bạn nói (đã được AI chuẩn hóa) sẽ tự động dán vào cửa sổ bạn đang trỏ chuột.")
     print("Nhấn 'Ctrl+C' trong cửa sổ terminal này để thoát.")
     print("="*50)

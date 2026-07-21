@@ -3,7 +3,7 @@
 `myvoice` là một ứng dụng "Push-to-talk" trên Windows giúp bạn có thể nói chuyện trực tiếp với AI thay vì phải chat. Thay vì chỉ nhập văn bản bằng giọng nói (như chức năng dictation), `myvoice` sẽ lắng nghe giọng nói của bạn, gửi cho AI (Google Gemini), và AI sẽ tự động gõ câu trả lời vào ứng dụng mà bạn đang sử dụng.
 
 ## Tính năng
-- **Push-to-talk**: Giữ phím `F8`, nói, và nhả phím để kết thúc. Không cần phải click chuột hay thao tác phức tạp.
+- **Push-to-talk**: Giữ phím `Ctrl`, nói, và nhả phím để kết thúc. Không cần phải click chuột hay thao tác phức tạp.
 - **Auto-type**: AI tự động dán (paste) câu trả lời của mình thẳng vào bất kì ô text nào bạn đang trỏ chuột tới (Zalo, Word, trình duyệt, Code Editor...).
 - Sử dụng Google Web Speech API (nhận dạng giọng nói miễn phí) & Gemini 1.5 Flash (Xử lý AI siêu tốc).
 
@@ -32,9 +32,9 @@
    python main.py
    ```
 2. Mở một ứng dụng bất kỳ (ví dụ: Notepad, Zalo, trình duyệt) và đặt con trỏ chuột vào vị trí gõ văn bản.
-3. Nhấn và GIỮ phím `F8` trên bàn phím.
+3. Nhấn và GIỮ phím `Ctrl` trên bàn phím.
 4. Nói câu hỏi của bạn (ví dụ: "Viết cho tôi một hàm Python tính giai thừa").
-5. Nhả phím `F8` ra. Đợi vài giây, câu trả lời của AI sẽ tự động được gõ vào màn hình.
+5. Nhả phím `Ctrl` ra. Đợi vài giây, câu trả lời của AI sẽ tự động được gõ vào màn hình.
 
 ## Đóng góp
 Dự án được tạo bởi [anhtuan161](https://github.com/anhtuan161). Mọi đóng góp xin vui lòng tạo Pull Request!
