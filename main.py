@@ -75,24 +75,18 @@ def stop_recording():
         print("[-] Không có âm thanh nào được ghi lại.")
         return
         
-    # Lưu ra file WAV tạm
-    temp_wav = "temp_audio.wav"
-    wf = wave.open(temp_wav, 'wb')
-    wf.setnchannels(1)
-    wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))
-    wf.setframerate(44100)
-    wf.writeframes(b''.join(audio_frames))
-    wf.close()
+    # Xử lý âm thanh trên RAM, không lưu ra file để tránh lỗi file bị khoá
+    raw_data = b''.join(audio_frames)
+    sample_width = p.get_sample_size(pyaudio.paInt16)
     
     # Tạo một thread để xử lý AI tránh làm block việc bắt phím
-    threading.Thread(target=process_audio, args=(temp_wav,), daemon=True).start()
+    threading.Thread(target=process_audio, args=(raw_data, sample_width), daemon=True).start()
 
-def process_audio(wav_file):
+def process_audio(raw_data, sample_width):
     recognizer = sr.Recognizer()
-    with sr.AudioFile(wav_file) as source:
-        audio_data = recognizer.record(source)
-        try:
-            print("[+] Đang nhận dạng giọng nói (Speech-to-Text)...")
+    audio_data = sr.AudioData(raw_data, 44100, sample_width)
+    try:
+        print("[+] Đang nhận dạng giọng nói (Speech-to-Text)...")
             text = recognizer.recognize_google(audio_data, language="vi-VN")
             print(f"--> Bạn đã nói: \"{text}\"")
             
@@ -129,9 +123,6 @@ def process_audio(wav_file):
             print(f"[-] Lỗi API nhận dạng giọng nói: {e}")
         except Exception as e:
             print(f"[-] Lỗi xử lý AI hoặc kết nối: {e}")
-        finally:
-            if os.path.exists(wav_file):
-                os.remove(wav_file)
 
 def on_key_event(e):
     # Sử dụng phím Ctrl làm Push-to-talk
