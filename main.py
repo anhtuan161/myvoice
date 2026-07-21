@@ -10,6 +10,9 @@ import pyaudio
 import struct
 import math
 from dotenv import load_dotenv
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+from comtypes import CLSCTX_ALL
+import ctypes
 
 load_dotenv()
 
@@ -193,6 +196,17 @@ def on_key_down():
 def on_key_up():
     _recording.clear()
 
+def set_mic_max_volume():
+    """Đặt âm lượng microphone mặc định lên 100%."""
+    try:
+        devices = AudioUtilities.GetMicrophone()
+        interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+        volume = ctypes.cast(interface, ctypes.POINTER(IAudioEndpointVolume))
+        volume.SetMasterVolumeLevelScalar(1.0, None)  # 1.0 = 100%
+        print("[🔊] Microphone đã được đặt lên 100%.")
+    except Exception as e:
+        print(f"[⚠] Không thể điều chỉnh âm lượng mic: {e}")
+
 if __name__ == "__main__":
     print("="*50)
     print("🚀 myvoice — AI Dictation for Windows")
@@ -202,6 +216,9 @@ if __name__ == "__main__":
         print("⚠️  CẢNH BÁO: Chưa có GEMINI_API_KEY trong file .env!")
         print("   Ứng dụng vẫn chạy nhưng KHÔNG chuẩn hóa câu chữ bằng AI.")
         print("   Tạo key miễn phí tại: https://aistudio.google.com/app/apikey\n")
+
+    # Đặt mic lên 100% ngay khi khởi động
+    set_mic_max_volume()
 
     # Kiểm tra mic ngay khi khởi động
     test_microphone()
