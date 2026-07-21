@@ -20,13 +20,14 @@ SAMPLE_RATE    = 44100
 CHUNK          = 1024
 FORMAT         = pyaudio.paInt16
 CHANNELS       = 1
+# Dùng gemini-2.5-flash-lite: nhanh, ổn định, hỗ trợ tiếng Việt tốt
+GEMINI_MODEL   = 'gemini-2.5-flash-lite'
 # ─────────────────────────────────────────────────────────────
 
 if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-    model = genai.GenerativeModel('gemini-2.5-flash')
+    ai_client = genai.Client(api_key=GEMINI_API_KEY)
 else:
-    model = None
+    ai_client = None
 
 # Biến trạng thái — dùng threading.Event để thread-safe
 _recording     = threading.Event()
@@ -150,13 +151,16 @@ def transcribe_and_paste(raw_data, sample_width):
         text = recognizer.recognize_google(audio_data, language="vi-VN")
         print(f"[✔] Bạn nói: \"{text}\"")
 
-        if model:
+        if ai_client:
             print("[🤖] Đang chuẩn hóa câu chữ...")
-            response = model.generate_content(
-                f"Bạn là công cụ chỉnh sửa văn bản tiếng Việt. "
-                f"Chỉ sửa lỗi chính tả và dấu câu, giữ nguyên ý nghĩa và văn phong. "
-                f"TUYỆT ĐỐI không trả lời hay bình luận gì thêm. "
-                f"CHỈ trả về câu đã sửa: \"{text}\""
+            response = ai_client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=(
+                    f"Bạn là công cụ chỉnh sửa văn bản tiếng Việt. "
+                    f"Chỉ sửa lỗi chính tả và dấu câu, giữ nguyên ý nghĩa và văn phong. "
+                    f"TUYỆT ĐỐI không trả lời hay bình luận gì thêm. "
+                    f"CHỈ trả về câu đã sửa: \"{text}\""
+                )
             )
             output = response.text.strip()
         else:
