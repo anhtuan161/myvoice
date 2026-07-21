@@ -1,6 +1,6 @@
 import keyboard
 import speech_recognition as sr
-import google.generativeai as genai
+from google import genai
 import pyautogui
 import pyperclip
 import time
