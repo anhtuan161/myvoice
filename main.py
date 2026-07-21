@@ -100,14 +100,14 @@ def process_audio(wav_file):
                 print("[-] Lỗi: Chưa cấu hình GEMINI_API_KEY. Không thể gọi AI.")
                 return
                 
-            print("[+] Đang chờ AI phản hồi...")
+            print("[+] Đang chờ AI chuẩn hóa câu...")
             response = model.generate_content(
-                f"Bạn là một trợ lý AI thông minh. Trả lời ngắn gọn, trực tiếp vào vấn đề. Người dùng hỏi/nói: {text}"
+                f"Bạn là một công cụ chỉnh sửa văn bản. Hãy sửa lỗi chính tả, dấu câu của câu sau, giữ nguyên văn phong và ý nghĩa. TUYỆT ĐỐI KHÔNG trả lời câu hỏi hoặc bình luận thêm. CHỈ in ra câu đã được sửa: \"{text}\""
             )
             ai_text = response.text.strip()
-            print(f"--> AI trả lời:\n{ai_text}")
+            print(f"--> Đoạn văn bản hoàn chỉnh:\n{ai_text}")
             
-            print("[+] Đang xuất văn bản ra màn hình...")
+            print("[+] Đang dán văn bản ra màn hình...")
             # Backup clipboard cũ
             old_clipboard = pyperclip.paste()
             
@@ -151,7 +151,7 @@ if __name__ == "__main__":
     print("="*50)
     print("🚀 Ứng dụng 'myvoice' đang chạy!")
     print("🎙️  Nhấn và GIỮ phím 'F8', nói, và NHẢ phím để kết thúc.")
-    print("Văn bản AI trả lời sẽ tự động được gõ vào cửa sổ bạn đang trỏ chuột.")
+    print("Văn bản bạn nói (đã được AI chuẩn hóa) sẽ tự động dán vào cửa sổ bạn đang trỏ chuột.")
     print("Nhấn 'Ctrl+C' trong cửa sổ terminal này để thoát.")
     print("="*50)
     
