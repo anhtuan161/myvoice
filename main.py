@@ -87,42 +87,42 @@ def process_audio(raw_data, sample_width):
     audio_data = sr.AudioData(raw_data, 44100, sample_width)
     try:
         print("[+] Đang nhận dạng giọng nói (Speech-to-Text)...")
-            text = recognizer.recognize_google(audio_data, language="vi-VN")
-            print(f"--> Bạn đã nói: \"{text}\"")
+        text = recognizer.recognize_google(audio_data, language="vi-VN")
+        print(f"--> Bạn đã nói: \"{text}\"")
+        
+        if not model:
+            print("[-] Lỗi: Chưa cấu hình GEMINI_API_KEY. Không thể gọi AI.")
+            return
             
-            if not model:
-                print("[-] Lỗi: Chưa cấu hình GEMINI_API_KEY. Không thể gọi AI.")
-                return
-                
-            print("[+] Đang chờ AI chuẩn hóa câu...")
-            response = model.generate_content(
-                f"Bạn là một công cụ chỉnh sửa văn bản. Hãy sửa lỗi chính tả, dấu câu của câu sau, giữ nguyên văn phong và ý nghĩa. TUYỆT ĐỐI KHÔNG trả lời câu hỏi hoặc bình luận thêm. CHỈ in ra câu đã được sửa: \"{text}\""
-            )
-            ai_text = response.text.strip()
-            print(f"--> Đoạn văn bản hoàn chỉnh:\n{ai_text}")
+        print("[+] Đang chờ AI chuẩn hóa câu...")
+        response = model.generate_content(
+            f"Bạn là một công cụ chỉnh sửa văn bản. Hãy sửa lỗi chính tả, dấu câu của câu sau, giữ nguyên văn phong và ý nghĩa. TUYỆT ĐỐI KHÔNG trả lời câu hỏi hoặc bình luận thêm. CHỈ in ra câu đã được sửa: \"{text}\""
+        )
+        ai_text = response.text.strip()
+        print(f"--> Đoạn văn bản hoàn chỉnh:\n{ai_text}")
+        
+        print("[+] Đang dán văn bản ra màn hình...")
+        # Backup clipboard cũ
+        old_clipboard = pyperclip.paste()
+        
+        # Copy câu trả lời của AI vào clipboard
+        pyperclip.copy(ai_text)
+        time.sleep(0.1) # Đợi một chút để OS nhận diện clipboard
+        
+        # Mô phỏng phím Ctrl+V để dán nội dung vào app hiện tại
+        pyautogui.hotkey('ctrl', 'v')
+        
+        # Phục hồi clipboard (Tuỳ chọn - đợi dán xong mới phục hồi)
+        time.sleep(0.5)
+        pyperclip.copy(old_clipboard)
+        print("[+] Hoàn tất!")
             
-            print("[+] Đang dán văn bản ra màn hình...")
-            # Backup clipboard cũ
-            old_clipboard = pyperclip.paste()
-            
-            # Copy câu trả lời của AI vào clipboard
-            pyperclip.copy(ai_text)
-            time.sleep(0.1) # Đợi một chút để OS nhận diện clipboard
-            
-            # Mô phỏng phím Ctrl+V để dán nội dung vào app hiện tại
-            pyautogui.hotkey('ctrl', 'v')
-            
-            # Phục hồi clipboard (Tuỳ chọn - đợi dán xong mới phục hồi)
-            time.sleep(0.5)
-            pyperclip.copy(old_clipboard)
-            print("[+] Hoàn tất!")
-            
-        except sr.UnknownValueError:
-            print("[-] Không thể nhận dạng được giọng nói của bạn.")
-        except sr.RequestError as e:
-            print(f"[-] Lỗi API nhận dạng giọng nói: {e}")
-        except Exception as e:
-            print(f"[-] Lỗi xử lý AI hoặc kết nối: {e}")
+    except sr.UnknownValueError:
+        print("[-] Không thể nhận dạng được giọng nói của bạn.")
+    except sr.RequestError as e:
+        print(f"[-] Lỗi API nhận dạng giọng nói: {e}")
+    except Exception as e:
+        print(f"[-] Lỗi xử lý AI hoặc kết nối: {e}")
 
 def on_key_event(e):
     # Sử dụng phím Ctrl làm Push-to-talk
