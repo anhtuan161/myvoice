@@ -20,8 +20,8 @@ SAMPLE_RATE    = 44100
 CHUNK          = 1024
 FORMAT         = pyaudio.paInt16
 CHANNELS       = 1
-# Dùng gemini-2.5-flash-lite: nhanh, ổn định, hỗ trợ tiếng Việt tốt
-GEMINI_MODEL   = 'gemini-2.5-flash-lite'
+# Dùng gemini-2.0-flash: ổn định, hỗ trợ tiếng Việt tốt, dùng được với tất cả tài khoản
+GEMINI_MODEL   = 'gemini-2.0-flash'
 # ─────────────────────────────────────────────────────────────
 
 if GEMINI_API_KEY:
